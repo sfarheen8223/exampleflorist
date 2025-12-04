@@ -1,0 +1,352 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Bloom & Letter Floristry — Demo</title>
+  <style>
+    :root{--accent:#b83b5e;--muted:#666;--card:#fff;--bg:#f7f7f8}
+    *{box-sizing:border-box}
+    body{font-family:Inter,system-ui,Segoe UI,Arial,sans-serif;margin:0;background:var(--bg);color:#222}
+    header{background:linear-gradient(90deg,#fff 0%, #fff0 100%);padding:18px 24px;border-bottom:1px solid #e6e6e6;position:sticky;top:0;z-index:10}
+    .container{max-width:1060px;margin:0 auto;padding:24px}
+    .brand{display:flex;gap:16px;align-items:center}
+    .logo{width:64px;height:64px;background:linear-gradient(135deg,var(--accent),#ff7b7b);border-radius:12px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:20px}
+    h1{margin:0;font-size:20px}
+    .top-row{display:flex;justify-content:space-between;align-items:center}
+    nav{display:flex;gap:12px}
+    nav button{background:none;border:0;padding:8px 12px;border-radius:8px;cursor:pointer}
+    .hero{display:grid;grid-template-columns:1fr 380px;gap:24px;align-items:center;margin-top:24px}
+    .card{background:var(--card);padding:18px;border-radius:12px;box-shadow:0 6px 18px rgba(0,0,0,0.05)}
+    .quote{font-size:18px;color:var(--accent);font-weight:600}
+    .info p{margin:8px 0;color:var(--muted)}
+    .hours{margin-top:12px}
+    .search{display:flex;gap:8px;align-items:center;margin-top:12px}
+    .search input{flex:1;padding:10px;border-radius:8px;border:1px solid #ddd}
+    .categories{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}
+    .cat{padding:8px 12px;border-radius:999px;border:1px solid #ddd;background:#fff;cursor:pointer}
+    .cat.active{background:var(--accent);color:#fff;border-color:transparent}
+    .products-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px;margin-top:18px}
+    .product{padding:14px;border-radius:12px;background:#fff;border:1px solid #eee}
+    .product img{width:100%;height:140px;object-fit:cover;border-radius:8px}
+    .product h3{margin:10px 0 6px;font-size:16px}
+    .price{font-weight:700;color:var(--accent)}
+    .features{font-size:13px;color:var(--muted)}
+    .btn{display:inline-block;padding:8px 12px;border-radius:8px;background:var(--accent);color:#fff;border:0;cursor:pointer}
+    footer{margin-top:36px;padding:24px 0;color:var(--muted)}
+    .location{display:flex;gap:12px;align-items:flex-start}
+    .map{width:100%;height:220px;background:linear-gradient(90deg,#eee,#f4f4f4);border-radius:10px;border:1px dashed #ddd}
+    .cart{position:fixed;right:20px;bottom:20px;width:320px;max-width:calc(100% - 40px)}
+    .cart .cart-inner{background:#fff;padding:12px;border-radius:12px;box-shadow:0 12px 30px rgba(0,0,0,0.12)}
+    .cart h4{margin:0 0 8px}
+    .cart .item{display:flex;gap:8px;align-items:center;border-top:1px solid #eee;padding:8px 0}
+    .small{width:52px;height:52px;border-radius:8px;object-fit:cover}
+    .checkout{display:flex;justify-content:space-between;align-items:center;margin-top:12px}
+    @media(max-width:880px){.hero{grid-template-columns:1fr}.cart{right:12px;left:12px;width:auto}}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container top-row">
+      <div class="brand">
+        <div class="logo">B&L</div>
+        <div>
+          <h1>Bloom & Letter Floristry</h1>
+          <div style="font-size:13px;color:var(--muted)">123 Garden Ave, Newark, NJ 07102</div>
+        </div>
+      </div>
+      <nav>
+        <button onclick="scrollToSection('home')">Home</button>
+        <button onclick="scrollToSection('shop')">Shop</button>
+        <button onclick="scrollToSection('location')">Location</button>
+        <button onclick="scrollToSection('contact')">Contact</button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container" id="home">
+    <section class="hero">
+      <div>
+        <div class="card">
+          <div class="quote">Why flowers? — Because they say the things words can't.</div>
+          <p style="margin-top:12px">At Bloom & Letter we craft fresh arrangements for life's moments: celebrations, condolences, and everyday joy. Fast local delivery across Newark and surrounding areas. Practice demo site — no real payments conducted.</p>
+
+          <div class="info">
+            <strong>Hours of operation</strong>
+            <div class="hours">
+              <div>Mon — Sat: 9:00 AM — 6:00 PM</div>
+              <div>Sun: Closed</div>
+            </div>
+            <p style="margin-top:12px"><strong>Phone:</strong> (555) 123-4567 &nbsp; • &nbsp; <strong>Email:</strong> hello@bloomletter.example</p>
+          </div>
+
+          <div class="search">
+            <input id="search" placeholder="Search bouquets, roses, delivery..." oninput="applySearch()" />
+            <button class="btn" onclick="openCart()">View Cart</button>
+          </div>
+
+          <div class="categories" id="categories"></div>
+        </div>
+
+        <div id="shop" class="card" style="margin-top:18px">
+          <h2 style="margin:0">Shop</h2>
+          <div id="products" class="products-grid"></div>
+        </div>
+
+      </div>
+
+      <aside>
+        <div class="card">
+          <h3 style="margin-top:0">Get a quick quote</h3>
+          <p style="margin:0 0 8px">Choose a category and tell us your budget. We'll suggest an arrangement.</p>
+          <div style="display:flex;gap:8px;margin-top:8px">
+            <input id="quoteBudget" placeholder="$50" style="flex:1;padding:8px;border-radius:8px;border:1px solid #ddd" />
+            <button class="btn" onclick="getQuote()">Get Quote</button>
+          </div>
+          <div id="quoteResult" style="margin-top:12px;color:var(--muted)"></div>
+        </div>
+
+        <div class="card" style="margin-top:14px">
+          <h4 style="margin:0">Delivery Areas</h4>
+          <p style="margin:8px 0;color:var(--muted)">Newark, Belleville, Kearny, Harrison — local delivery $7. Out of area: call for pricing.</p>
+          <div style="margin-top:10px"><strong>Pickup available</strong> at our shop during business hours.</div>
+        </div>
+      </aside>
+
+    </section>
+
+    <section id="location" style="margin-top:26px">
+      <div class="card">
+        <h2 style="margin-top:0">Location</h2>
+        <div class="location">
+          <div style="flex:1">
+            <p style="margin-top:0">Bloom & Letter Floristry<br>123 Garden Ave<br>Newark, NJ 07102</p>
+            <p style="margin:0;color:var(--muted)">Open Mon–Sat 9am–6pm</p>
+            <div style="margin-top:12px">
+              <strong>Note</strong>: This is a demo address for the practice website. Replace with your real address before publishing.
+            </div>
+          </div>
+          <div style="width:380px">
+            <div class="map"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact" style="margin-top:18px">
+      <div class="card">
+        <h2 style="margin-top:0">Contact & Payment</h2>
+        <p style="margin-top:0;color:var(--muted)">We accept card payments (test mode), Apple Pay / Google Pay (simulated), and Pay on Delivery.</p>
+        <div style="display:grid;grid-template-columns:1fr 320px;gap:16px;margin-top:12px">
+          <div>
+            <form id="contactForm" onsubmit="event.preventDefault();alert('Message sent (demo)')">
+              <label>Name</label>
+              <input required style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;margin-top:6px" />
+              <label style="display:block;margin-top:8px">Message</label>
+              <textarea required style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;margin-top:6px" rows="4"></textarea>
+              <button class="btn" style="margin-top:8px">Send</button>
+            </form>
+          </div>
+
+          <div class="card">
+            <h4 style="margin-top:0">Checkout (demo)</h4>
+            <div style="font-size:13px;color:var(--muted)">Choose payment method on the cart when you checkout.</div>
+            <div style="margin-top:10px">
+              <button class="btn" onclick="openCart()">Open Cart & Checkout</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <div class="container" style="padding:0">
+        <small>© Bloom & Letter Floristry — Demo. Address and phone are placeholders. This project is provided as copy-paste practice code.</small>
+      </div>
+    </footer>
+  </main>
+
+  <!-- Cart UI (hidden until items added) -->
+  <div class="cart" id="cart" style="display:none">
+    <div class="cart-inner card">
+      <h4>Your Cart</h4>
+      <div id="cartItems"></div>
+      <div class="checkout">
+        <div>
+          <div style="font-size:14px;color:var(--muted)">Total</div>
+          <div id="cartTotal" style="font-weight:700;font-size:18px">$0.00</div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <button class="btn" onclick="checkout()">Checkout</button>
+          <button style="padding:8px;border-radius:8px;border:1px solid #ccc;background:#fff;cursor:pointer" onclick="closeCart()">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Demo data for categories and products (5 products each)
+    const DATA = {
+      "Valentines": [
+        {id: 'v1', name:'Classic Red Roses Bouquet', price:79, img:'https://picsum.photos/seed/rose1/400/300', features:['12 long-stem red roses','Gift wrap','1-day delivery']},
+        {id: 'v2', name:'Sweetheart Mix', price:65, img:'https://picsum.photos/seed/rose2/400/300', features:['Roses + Alstroemeria','Ribbon','Note card']},
+        {id: 'v3', name:'Heart-Shaped Arrangement', price:120, img:'https://picsum.photos/seed/rose3/400/300', features:['Heart design','Premium roses','Delivery box']},
+        {id: 'v4', name:'Blushing Tulips', price:55, img:'https://picsum.photos/seed/rose4/400/300', features:['10 pink tulips','Minimal wrapping','Same day pickup']},
+        {id: 'v5', name:'Chocolate & Roses Combo', price:95, img:'https://picsum.photos/seed/rose5/400/300', features:['6 roses + chocolates','Gift message','Luxury box']}
+      ],
+      "Mothers Day": [
+        {id: 'm1', name:'Mom’s Garden Basket', price:85, img:'https://picsum.photos/seed/mom1/400/300', features:['Mixed seasonal flowers','Keepsake basket','Care card']},
+        {id: 'm2', name:'Lavender Love', price:70, img:'https://picsum.photos/seed/mom2/400/300', features:['Lavender bunch','Relaxing scent sachet','Hand-tied']},
+        {id: 'm3', name:'Sunny Posy', price:60, img:'https://picsum.photos/seed/mom3/400/300', features:['Sunflowers & daisies','Bright wrap','Delivery included']},
+        {id: 'm4', name:'Pastel Elegance', price:95, img:'https://picsum.photos/seed/mom4/400/300', features:['Peonies & roses','Premium vase','Gift card']},
+        {id: 'm5', name:'Tea & Blooms', price:50, img:'https://picsum.photos/seed/mom5/400/300', features:['Small bouquet + tea sachet','Eco wrap','Budget-friendly']}
+      ],
+      "Weddings": [
+        {id: 'w1', name:'Bridal Classic', price:220, img:'https://picsum.photos/seed/wed1/400/300', features:['Bridal bouquet','Ribbon finish','Consultation']},
+        {id: 'w2', name:'Bridesmaid Bundle', price:85, img:'https://picsum.photos/seed/wed2/400/300', features:['5 matching bouquets','Delivery to venue','Same color palette']},
+        {id: 'w3', name:'Table Centerpiece', price:110, img:'https://picsum.photos/seed/wed3/400/300', features:['Low centerpiece','Foam base','Event setup available']},
+        {id: 'w4', name:'Aisle Garland', price:180, img:'https://picsum.photos/seed/wed4/400/300', features:['6m garland','Fresh greenery','Setup service']},
+        {id: 'w5', name:'Groom Boutonniere', price:18, img:'https://picsum.photos/seed/wed5/400/300', features:['Single bloom','Pin included','Matching to bouquet']}
+      ],
+      "Funeral": [
+        {id: 'f1', name:'Standing Spray', price:150, img:'https://picsum.photos/seed/fun1/400/300', features:['While supplies last','Sympathetic design','Delivered to service']},
+        {id: 'f2', name:'Sympathy Wreath', price:160, img:'https://picsum.photos/seed/fun2/400/300', features:['14 inch wreath','Greenery & lilies','Note available']},
+        {id: 'f3', name:'Comfort Basket', price:85, img:'https://picsum.photos/seed/fun3/400/300', features:['Mixed muted flowers','Comforting arrangement','Delivered']},
+        {id: 'f4', name:'Casket Spray (consult)', price:350, img:'https://picsum.photos/seed/fun4/400/300', features:['Full casket spray','Custom design','Call for details']},
+        {id: 'f5', name:'Hand-tied Tribute', price:70, img:'https://picsum.photos/seed/fun5/400/300', features:['Small tribute','Delivered with card','Simple arrangement']}
+      ],
+      "Everyday": [
+        {id: 'e1', name:'Cheerful Dozen', price:45, img:'https://picsum.photos/seed/e1/400/300', features:['12 mixed stems','Affordable','Same day']},
+        {id: 'e2', name:'Mini Posy', price:28, img:'https://picsum.photos/seed/e2/400/300', features:['Small desk vase','Budget','Cute wrap']},
+        {id: 'e3', name:'Seasonal Bouquet', price:55, img:'https://picsum.photos/seed/e3/400/300', features:['Seasonal picks','Colorful','Local flowers']},
+        {id: 'e4', name:'Premium Vase', price:95, img:'https://picsum.photos/seed/e4/400/300', features:['Ceramic vase included','Hand-arranged','Gift-ready']},
+        {id: 'e5', name:'Succulent Gift', price:35, img:'https://picsum.photos/seed/e5/400/300', features:['Low-maintenance','Potted','Care guide']}
+      ]
+    };
+
+    const categories = Object.keys(DATA);
+    const categoriesEl = document.getElementById('categories');
+    const productsEl = document.getElementById('products');
+    const cartEl = document.getElementById('cart');
+    let activeCat = categories[0];
+    let CART = [];
+
+    function init(){
+      // render categories
+      categories.forEach((c,i)=>{
+        const btn = document.createElement('button');
+        btn.textContent = c;
+        btn.className = 'cat' + (i===0? ' active':'');
+        btn.onclick = ()=>{selectCategory(c, btn)};
+        categoriesEl.appendChild(btn);
+      });
+      renderProducts();
+    }
+
+    function selectCategory(cat, btn){
+      activeCat = cat;
+      document.querySelectorAll('.cat').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      renderProducts();
+    }
+
+    function renderProducts(){
+      productsEl.innerHTML = '';
+      const list = DATA[activeCat] || [];
+      list.forEach(p=>{
+        const card = document.createElement('div'); card.className='product';
+        card.innerHTML = `<img alt="${p.name}" src="${p.img}" onerror="this.style.opacity=.6"/><h3>${p.name}</h3><div class='price'>$${p.price.toFixed(2)}</div><div class='features'>${p.features.join(' • ')}</div><div style='margin-top:10px'><button class='btn' onclick="addToCart('${p.id}')">Add to cart</button></div>`;
+        productsEl.appendChild(card);
+      });
+    }
+
+    function findProductById(id){
+      for(const cat of Object.keys(DATA)){
+        const p = DATA[cat].find(x=>x.id===id);
+        if(p) return p;
+      }
+      return null;
+    }
+
+    function addToCart(id){
+      const p = findProductById(id);
+      if(!p) return;
+      const existing = CART.find(i=>i.id===id);
+      if(existing) existing.qty++;
+      else CART.push({id:p.id,name:p.name,price:p.price,img:p.img,qty:1});
+      updateCartUI();
+      openCart();
+    }
+
+    function updateCartUI(){
+      const listEl = document.getElementById('cartItems');
+      listEl.innerHTML = '';
+      let total = 0;
+      CART.forEach(item=>{
+        total += item.price * item.qty;
+        const it = document.createElement('div'); it.className='item';
+        it.innerHTML = `<img class='small' src='${item.img}' onerror="this.style.opacity=.6" /><div style='flex:1'><div style='font-weight:700'>${item.name}</div><div style='font-size:13px;color:#666'>$${item.price.toFixed(2)} · Qty: <input style="width:48px;padding:4px;margin-left:6px" value="${item.qty}" onchange="changeQty('${item.id}', this.value)" /></div></div><div><button onclick="removeItem('${item.id}')" style='border:0;background:none;color:#c33;cursor:pointer'>Remove</button></div>`;
+        listEl.appendChild(it);
+      });
+      document.getElementById('cartTotal').textContent = '$' + total.toFixed(2);
+      cartEl.style.display = CART.length? 'block':'none';
+    }
+
+    function changeQty(id,val){
+      const n = parseInt(val) || 1;
+      const it = CART.find(i=>i.id===id);
+      if(it) it.qty = Math.max(1,n);
+      updateCartUI();
+    }
+    function removeItem(id){CART = CART.filter(i=>i.id!==id);updateCartUI();}
+
+    function openCart(){ cartEl.style.display = 'block'; window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'}) }
+    function closeCart(){ cartEl.style.display = 'none' }
+
+    function checkout(){
+      if(!CART.length){alert('Cart is empty');return}
+      const total = CART.reduce((s,i)=>s + i.price*i.qty,0);
+      const pay = confirm('Checkout demo — total $' + total.toFixed(2) + '\nPress OK to simulate card payment or Cancel to choose Pay on Delivery');
+      if(pay){
+        // fake payment flow
+        setTimeout(()=>{alert('Payment successful (demo). Order placed — thank you!'); CART=[]; updateCartUI()},600);
+      } else {
+        alert('Order placed with Pay on Delivery (demo). We will call to confirm.'); CART=[]; updateCartUI();
+      }
+    }
+
+    function getQuote(){
+      const budget = document.getElementById('quoteBudget').value || '50';
+      document.getElementById('quoteResult').textContent = `For $${budget} we recommend our ${activeCat} selections like "${DATA[activeCat][0].name}" — call us at (555) 123-4567 for custom quotes.`;
+    }
+
+    function scrollToSection(id){
+      const el = document.getElementById(id);
+      if(!el) return; el.scrollIntoView({behavior:'smooth'});
+    }
+
+    function applySearch(){
+      const q = document.getElementById('search').value.toLowerCase();
+      if(!q){ renderProducts(); return }
+      // simple filter across all products
+      const results = [];
+      for(const cat of Object.keys(DATA)){
+        for(const p of DATA[cat]){
+          if((p.name + ' ' + p.features.join(' ')).toLowerCase().includes(q)) results.push(p);
+        }
+      }
+      productsEl.innerHTML = '';
+      results.slice(0,30).forEach(p=>{
+        const card = document.createElement('div'); card.className='product';
+        card.innerHTML = `<img alt="${p.name}" src="${p.img}" onerror="this.style.opacity=.6"/><h3>${p.name}</h3><div class='price'>$${p.price.toFixed(2)}</div><div class='features'>${p.features.join(' • ')}</div><div style='margin-top:10px'><button class='btn' onclick="addToCart('${p.id}')">Add to cart</button></div>`;
+        productsEl.appendChild(card);
+      });
+    }
+
+    // small helper to find category by product id (used externally if needed)
+    window.findProductById = findProductById;
+
+    init();
+  </script>
+</body>
+</html>
